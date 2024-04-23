@@ -7,7 +7,7 @@ export type BookDocument = HydratedDocument<Book>;
 export class Book {
   @Prop({ unique: true })
   _id: string;
-  @Prop({ unique: true, required: true })
+  @Prop({ required: true })
   title: string;
   @Prop({ required: true })
   author: string;

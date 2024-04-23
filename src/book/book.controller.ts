@@ -16,13 +16,12 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { AuthGuardRest } from 'src/auth/auth-guard';
 
-@Controller('book')
+@Controller('books')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
-
+  @UseGuards(AuthGuardRest)
   @Post('/createBook')
   create(@Body() createBookDto: CreateBookDto) {
-    console.log('🍅[createBookDto]:', createBookDto);
     return this.bookService.create(createBookDto);
   }
   @UseGuards(AuthGuardRest)
@@ -39,12 +38,12 @@ export class BookController {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED, error);
     }
   }
-
+  @UseGuards(AuthGuardRest)
   @Get('/bookById/:id')
   async findOne(@Param('id') id: string) {
     try {
       const isFound = await this.bookService.findBookById(id);
-      console.log('🍝[isFound]:', isFound);
+
       if (isFound) {
         return isFound;
       } else {
@@ -54,13 +53,10 @@ export class BookController {
         );
       }
     } catch (error) {
-      throw new HttpException(
-        'Error finding a book',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException('Error finding a book', HttpStatus.NOT_FOUND);
     }
   }
-
+  @UseGuards(AuthGuardRest)
   @Patch('/updateBook/:id')
   async update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     try {
@@ -80,7 +76,7 @@ export class BookController {
       );
     }
   }
-
+  @UseGuards(AuthGuardRest)
   @Delete('/deleteBook/:id')
   async remove(@Param('id') id: string) {
     try {
@@ -94,10 +90,7 @@ export class BookController {
         );
       }
     } catch (error) {
-      throw new HttpException(
-        'Error deleting book',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException('Error deleting book', HttpStatus.NOT_FOUND);
     }
   }
 }

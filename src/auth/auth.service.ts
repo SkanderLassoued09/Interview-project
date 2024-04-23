@@ -2,12 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async login(username: string, password: string): Promise<any> {
@@ -26,7 +28,9 @@ export class AuthService {
       if (matchpassword) {
         const payload = { _id: user._id, username: user.username };
         return {
-          access_token: this.jwtService.sign(payload, { secret: 'hide-me' }),
+          access_token: this.jwtService.sign(payload, {
+            secret: this.configService.get<string>('SECRET'),
+          }),
         };
       }
     }

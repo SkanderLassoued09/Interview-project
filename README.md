@@ -1,81 +1,68 @@
-# Book API
+## API Reference
 
-This API provides endpoints to manage books.
+#### Create User
 
-## Endpoints
+```http
+  POST  http://localhost:8080/users/createUser
+```
 
----
+| Parameter   | Type     | Description                        |
+| :---------- | :------- | :--------------------------------- |
+| `username`  | `string` | **Required**                       |
+| `firstName` | `string` | **Required**                       |
+| `lastName`  | `string` | **Required**                       |
+| `password`  | `string` | **Required&minLength 6 caracters** |
 
-### Create a Book
+```http
+  HINT: You must be logged in to access the Book APIs.
+```
 
-- URL: `POST [http://localhost:8080/book/createBook]`
-- Description: Creates a new book.
-- Request Body:
+#### Login
 
-  ````json
-  {
-    "title": "Atomic habits",
-    "author": "James Clear",
-    "isbn": "978-3-16-148410-0"
-  }
+```http
+POST http://localhost:8080/auth/login
+Response: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJVU0VSMCIsInVzZXJuYW1lIjoic2thbmRlciIsImlhdCI6MTcxMzkwOTg0Nn0.Hr7la-kEe5wUpKD7da53J-S49kMKoYKRQXe_3Q7GfKA
+NB: This token still available :)
+```
 
-  ```Response
+| Parameter  | Type     | Description  |
+| :--------- | :------- | :----------- |
+| `username` | `string` | **Required** |
+| `password` | `string` | **Required** |
 
-  {
-  "id": "BOOK0",
-  "title": "Atomic habits",
-  "author": "James Clear",
-  "isbn": "978-3-16-148410-0",
-  "createdAt": "2024-04-23T12:00:00.000Z",
-  "updatedAt": "2024-04-23T12:00:00.000Z"
-  }
-  ````
+#### Create Book
 
----
+```http
+  POST  http://localhost:8080/books/createBook
+```
 
-### Get All Books (Authenticated)
+| Parameter | Type     | Description  |
+| :-------- | :------- | :----------- |
+| `title`   | `string` | **Required** |
+| `author`  | `string` | **Required** |
+| `ISBN`    | `string` | **Optional** |
 
-- URL: `GET [http://localhost:8080/book/getBooks]`
-- Description: Retrieves all books.
-- Authorization: Bearer token required.
-- Response:
-  [
-  {
-  "id": "BOOK0",
-  "title": "Atomic hanits",
-  "author": "James clear",
-  "isbn": "978-3-16-148410-0",
-  "createdAt": "2024-04-23T12:00:00.000Z",
-  "updatedAt": "2024-04-23T12:00:00.000Z"
-  },
-  {
-  "id": "BOOK1",
-  "title": "To Kill a Mockingbird",
-  "author": "Harper Lee",
-  "isbn": "978-0-06-112008-4",
-  "createdAt": "2024-04-23T12:00:00.000Z",
-  "updatedAt": "2024-04-23T12:00:00.000Z"
-  }
-  ]
+#### Get all books
 
----
+```http
+  GET http://localhost:8080/books/getBooks
 
-### Get Book by ID
+```
 
-- URL: GET /book/bookById/:id
-  `[http://localhost:8080/book/bookById/BOOK0]`
-- Description: Retrieves a book by its ID.
-- Parameters:
-- id: The ID of the book.
-- Response:
+#### Get book by its ID
 
-  ```Response
-  {
-  "id": "BOOK0",
-  "title": "Atomic hanits",
-  "author": "James clear",
-  "isbn": "978-3-16-148410-0",
-  "createdAt": "2024-04-23T12:00:00.000Z",
-  "updatedAt": "2024-04-23T12:00:00.000Z"
-  },
-  ```
+```http
+  GET http://localhost:8080/books/bookById/:id
+```
+
+#### Delete Book
+
+```http
+  Delete http://localhost:8080/books/deleteBook/:id
+```
+
+#### Update Book
+
+```http
+  Delete http://localhost:8080/books/deleteBook/:id
+```

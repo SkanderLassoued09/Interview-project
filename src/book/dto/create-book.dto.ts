@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateBookDto {
   _id: string;
@@ -8,5 +8,7 @@ export class CreateBookDto {
   @IsNotEmpty({ message: 'author should not be empty' })
   @IsString({ message: 'author should  be string' })
   author: string;
+  @IsOptional()
+  @Length(13, 13, { message: 'ISBN should have exactly 13 characters' })
   ISBN?: string;
 }

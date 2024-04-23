@@ -11,6 +11,7 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
+  // for generating custom ID
   private async generateDiId(): Promise<number> {
     let userIndex = 0;
     const lastUser = await this.userModel.findOne(

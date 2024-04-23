@@ -24,9 +24,4 @@ export class UsersController {
   findUserByUsername(@Param('username') username: string) {
     return this.usersService.findUserByUsername(username);
   }
-  @UseGuards(AuthGuardRest)
-  @Get('/user')
-  getProfile(@Request() req) {
-    return req.user;
-  }
 }
