@@ -6,6 +6,10 @@ db version v6.0.5 (mongo)
 #### Create User
 
 ```http
+  HINT: You can create user without login.
+```
+
+```http
   POST  http://localhost:8080/users/createUser
 ```
 
@@ -67,5 +71,5 @@ NB: This token still available :)
 #### Update Book
 
 ```http
-  Delete http://localhost:8080/books/deleteBook/:id
+  PATCH http://localhost:8080/books/updateBook/:id
 ```
