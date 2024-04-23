@@ -30,11 +30,10 @@ export class BookController {
   getAllBooks(@Request() req) {
     try {
       const { username } = req.user;
-      console.log('🥞[username]:', username);
       if (username === 'skander') {
         return this.bookService.getBooks();
       } else {
-        throw new Error('Unauthorized');
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       }
     } catch (error) {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED, error);
@@ -42,44 +41,63 @@ export class BookController {
   }
 
   @Get('/bookById/:id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     try {
-      const isFound = this.bookService.findBookById(id);
+      const isFound = await this.bookService.findBookById(id);
+      console.log('🍝[isFound]:', isFound);
       if (isFound) {
         return isFound;
       } else {
-        throw new Error('Book not found');
+        throw new HttpException(
+          `Book with id:${id} not found`,
+          HttpStatus.NOT_FOUND,
+        );
       }
     } catch (error) {
-      throw new HttpException('Error', error);
+      throw new HttpException(
+        'Error finding a book',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   @Patch('/updateBook/:id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
+  async update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     try {
-      const isExist = this.bookService.findBookById(id);
-      if (isExist) {
-        return this.bookService.update(id, updateBookDto);
+      const isUpdated = await this.bookService.update(id, updateBookDto);
+      if (isUpdated.acknowledged && isUpdated.modifiedCount > 0) {
+        return { message: `Book with id:${id} updated successfully` };
       } else {
-        throw new Error('Book not found to update it ');
+        throw new HttpException(
+          'Book not found or could not be deleted',
+          HttpStatus.NOT_FOUND,
+        );
       }
     } catch (error) {
-      throw new HttpException('Error', error);
+      throw new HttpException(
+        'Error updating book',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   @Delete('/deleteBook/:id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     try {
-      const isExist = this.bookService.findBookById(id);
-      if (isExist) {
-        return this.bookService.remove(+id);
+      const isDeleted = await this.bookService.remove(id);
+      if (isDeleted.deletedCount && isDeleted.deletedCount > 0) {
+        return { message: 'Book deleted successfully', id };
       } else {
-        throw new Error('Book not found to delete it ');
+        throw new HttpException(
+          'Book not found or could not be deleted',
+          HttpStatus.NOT_FOUND,
+        );
       }
     } catch (error) {
-      throw new HttpException('Error', error);
+      throw new HttpException(
+        'Error deleting book',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

@@ -44,7 +44,6 @@ export class BookService {
   }
 
   async update(_id: string, updateBookDto: UpdateBookDto) {
-    console.log('🌯[updateBookDto]:', updateBookDto);
     const { title, author, ISBN } = updateBookDto;
     return await this.bookModel.updateOne(
       { _id },
@@ -58,7 +57,7 @@ export class BookService {
     );
   }
 
-  async remove(_id: number) {
+  async remove(_id: string) {
     return await this.bookModel.deleteOne({ _id });
   }
 }

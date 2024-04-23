@@ -8,6 +8,5 @@ export class CreateBookDto {
   @IsNotEmpty({ message: 'author should not be empty' })
   @IsString({ message: 'author should  be string' })
   author: string;
-
   ISBN?: string;
 }
